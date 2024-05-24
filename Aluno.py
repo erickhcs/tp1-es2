@@ -1,8 +1,8 @@
-# usuario.py
+# aluno.py
 import pickle
 from credito import Credito
 
-class Usuario:
+class Aluno:
     def __init__(self, nome, cpf, matricula):
         self.nome = nome
         self.cpf = cpf
@@ -11,12 +11,12 @@ class Usuario:
         self.auxilios = []
 
     def __str__(self):
-        return f"Usuário: {self.nome}, CPF: {self.cpf}, Matrícula: {self.matricula}, Crédito: R${self.credito.saldo:.2f}"
+        return f"Aluno: {self.nome}, CPF: {self.cpf}, Matrícula: {self.matricula}, Crédito: R${self.credito.saldo:.2f}"
 
     def adicionar_auxilio(self, auxilio):
         self.credito.adicionar_credito(auxilio.valor)
         self.auxilios.append(auxilio)
-        print(f"Auxílio {auxilio.tipo} de R${auxilio.valor:.2f} adicionado ao usuário {self.nome}.")
+        print(f"Auxílio {auxilio.tipo} de R${auxilio.valor:.2f} adicionado ao aluno {self.nome}.")
 
     def exibir_auxilios(self):
         if not self.auxilios:
@@ -30,18 +30,18 @@ class Usuario:
         print(f"Saldo atual de {self.nome}: R${self.credito.saldo:.2f}")
         
     @staticmethod
-    def salvar_usuarios(usuarios, filename="usuarios.pkl"):
+    def salvar_alunos(alunos, filename="alunos.pkl"):
         with open(filename, 'wb') as file:
-            pickle.dump(usuarios, file)
-        print("Usuários salvos com sucesso.")
+            pickle.dump(alunos, file)
+        print("Alunos salvos com sucesso.")
 
     @staticmethod
-    def carregar_usuarios(filename="usuarios.pkl"):
+    def carregar_alunos(filename="alunos.pkl"):
         try:
             with open(filename, 'rb') as file:
-                usuarios = pickle.load(file)
-            print("Usuários carregados com sucesso.")
-            return usuarios
+                alunos = pickle.load(file)
+            print("Alunos carregados com sucesso.")
+            return alunos
         except FileNotFoundError:
-            print("Arquivo não encontrado. Iniciando com lista de usuários vazia.")
+            print("Arquivo não encontrado. Iniciando com lista de alunos vazia.")
             return []
