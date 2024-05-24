@@ -1,4 +1,5 @@
 # usuario.py
+import pickle
 from credito import Credito
 
 class Usuario:
@@ -27,3 +28,20 @@ class Usuario:
 
     def exibir_saldo(self):
         print(f"Saldo atual de {self.nome}: R${self.credito.saldo:.2f}")
+        
+    @staticmethod
+    def salvar_usuarios(usuarios, filename="usuarios.pkl"):
+        with open(filename, 'wb') as file:
+            pickle.dump(usuarios, file)
+        print("Usuários salvos com sucesso.")
+
+    @staticmethod
+    def carregar_usuarios(filename="usuarios.pkl"):
+        try:
+            with open(filename, 'rb') as file:
+                usuarios = pickle.load(file)
+            print("Usuários carregados com sucesso.")
+            return usuarios
+        except FileNotFoundError:
+            print("Arquivo não encontrado. Iniciando com lista de usuários vazia.")
+            return []
