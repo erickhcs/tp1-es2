@@ -12,11 +12,37 @@ class StudentManagement(cmd.Cmd):
     
     def do_add_course(self, line):
         'Add a new course separated by semicolon: add_student <name>;<course_id>;<max_students>'
-        splitted_entry = line.split(";")
+        try:
+          splitted_entry = line.split(";")
 
-        newCourse = Course(name=splitted_entry[0],course_id=splitted_entry[1],max_students=splitted_entry[2])
+          if len(splitted_entry) != 3:
+              print("add_course parameters are incorrect. You should pass values separated by semicolon: add_student <name>;<course_id>;<max_students>")
+              return
+                    
+          name=splitted_entry[0]
+          course_id=splitted_entry[1]
+          max_students=splitted_entry[2]
+
+          if len(name) == 0:
+             print("name parameter should not be empty!")
+             return
+          
+          if len(course_id) == 0:
+             print("course_id parameter should not be empty!")
+             return
+
+
+          if not max_students.isdigit():
+            print("max_students parameter should be a number!")
+            return
+
+
+          newCourse = Course(name,course_id,max_students=int(max_students))
+          
+          newCourse.save()
         
-        newCourse.save()
+        except ValueError as e:
+          print(f"Error: {e}")
 
     def do_list_courses(self, line):
         'List all registered courses'

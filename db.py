@@ -1,5 +1,5 @@
 import os
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 
 basePath = os.getcwd() + "/db"
 
@@ -11,6 +11,12 @@ class DB:
         table = self.db.table(tableName)
 
         table.insert(data)
+
+    def get(self, tableName, field, data):
+        table = self.db.table(tableName)
+        query = Query()
+
+        return table.get(query[field] == data)
 
     def get_all(self, tableName):
         table = self.db.table(tableName)
