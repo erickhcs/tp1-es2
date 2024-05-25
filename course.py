@@ -62,6 +62,10 @@ class Course:
 
         students_in_course = list(filter(lambda student: student['registration'] in set(course['students']), list(all_students)))
 
+        if not students_in_course:
+            print(f"Students list from course {course['name']} is empty!")
+            return
+
         for student in students_in_course:
             name = student["name"]
             cpf = student["cpf"]
@@ -93,9 +97,37 @@ class Course:
             return
         
         courseObj = Course(name=course['name'],course_id=course['id'],max_students=course['max_students'])
-        print(course['students'] + [student['registration']])
         courseObj.students = course['students'] + [student['registration']]
 
         courseObj.update()
 
         print(f"Student {student['name']} has been registered to the course {course['name']} with success!")
+
+    @staticmethod
+    def remove_student(student_registration,course_id):
+        db = DB()
+
+        course = db.get(tableName="courses",field="id",data=course_id)
+        student = Student.get(student_registration)
+
+        if not course:
+            print(f"Course id {course_id} doesn't exists!")
+            return
+
+        if not student:
+            print(f"Student registration {student_registration} doesn't exists!")
+            return
+        
+        if not student['registration'] in set(course['students']):
+            print(f"Student {student['name']} is not registered in the course {course['name']}!")
+            return
+                
+        courseObj = Course(name=course['name'],course_id=course['id'],max_students=course['max_students'])
+
+        new_students_in_course = list(filter(lambda registeredStudentRegistration: registeredStudentRegistration != student[ 'registration'], list(course['students'])))
+
+        courseObj.students = new_students_in_course
+
+        courseObj.update()
+
+        print(f"Student {student['name']} has been removed from the course {course['name']} with success!")

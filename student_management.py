@@ -113,3 +113,28 @@ class StudentManagement(cmd.Cmd):
 
         except ValueError as e:
             print(f"Error: {e}")
+
+    def do_remove_student_from_course(self, line):
+        'Remove student from course: remove_student_from_course <student_registration>;<course_id>'
+        try:
+            splitted_entry = line.split(";")
+
+            if len(splitted_entry) != 2:
+                    print("remove_student_from_course parameters are incorrect. You should pass values separated by semicolon: remove_student_from_course <student_registration>;<course_id>")
+                    return
+            
+            student_registration = splitted_entry[0]
+            course_id = splitted_entry[1]
+
+            if len(course_id) == 0:
+                print("course_id parameter should not be empty!")
+                return
+
+            if not student_registration.isdigit():
+                print("student_registration parameter should be a number!")
+                return
+            
+            Course.remove_student(student_registration=int(student_registration),course_id=course_id)
+
+        except ValueError as e:
+            print(f"Error: {e}")
