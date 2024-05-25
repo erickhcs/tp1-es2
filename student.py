@@ -28,7 +28,7 @@ class Student:
     def show_balance(self):
         print(f"Current balance of {self.name}: ${self.credit.balance:.2f}")
     
-    def save(self):
+    def create(self):
         db = DB()
 
         studentInDB = db.get(tableName="students", field="registration", data=self.registration)
@@ -42,6 +42,12 @@ class Student:
         print(f"Student {self.name} created with success!")
 
     @staticmethod
+    def get(student_registration):
+        db = DB()
+
+        return db.get(tableName="students",field="registration",data=student_registration)
+
+    @staticmethod
     def list_all():
         db = DB()
 
@@ -53,8 +59,6 @@ class Student:
             registration = student["registration"]
 
             print(f"Name: {name}, CPF: {cpf}, Registration: {registration}")
-
-
 
     @staticmethod
     def get_all():

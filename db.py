@@ -20,3 +20,9 @@ class DB:
         table = self.db.table(tableName)
 
         return table.all()
+    
+    def update(self, tableName,field, fieldData, data):
+        table = self.db.table(tableName)
+        query = Query()
+
+        table.update(data, query[field] == fieldData)

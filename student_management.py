@@ -38,7 +38,7 @@ class StudentManagement(cmd.Cmd):
 
             newCourse = Course(name,course_id,max_students=int(max_students))
             
-            newCourse.save()
+            newCourse.create()
         
         except ValueError as e:
             print(f"Error: {e}")
@@ -80,7 +80,7 @@ class StudentManagement(cmd.Cmd):
 
             newStudent = Student(name,cpf,registration=int(registration))
             
-            newStudent.save()
+            newStudent.create()
         
         except ValueError as e:
             print(f"Error: {e}")
@@ -88,3 +88,28 @@ class StudentManagement(cmd.Cmd):
     def do_list_students(self, line):
         'List all registered students'
         Student.list_all()
+
+    def do_register_student_in_course(self, line):
+        'Register student in course: register_student_in_course <student_registration>;<course_id>'
+        try:
+            splitted_entry = line.split(";")
+
+            if len(splitted_entry) != 2:
+                print("register_student_in_course parameters are incorrect. You should pass values separated by semicolon: register_student_in_course <student_registration>;<course_id>")
+                return
+            
+            student_registration = splitted_entry[0]
+            course_id = splitted_entry[1]
+
+            if len(course_id) == 0:
+                print("course_id parameter should not be empty!")
+                return
+
+            if not student_registration.isdigit():
+                print("student_registration parameter should be a number!")
+                return
+            
+            Course.add_student(student_registration=int(student_registration),course_id=course_id)
+
+        except ValueError as e:
+            print(f"Error: {e}")

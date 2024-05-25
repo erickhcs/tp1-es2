@@ -8,7 +8,7 @@ class Course:
         self.max_students = max_students
         self.students = []
 
-    def save(self):
+    def create(self):
         db = DB()
 
         courseInDB = db.get(tableName="courses", field="id", data=self.id)
@@ -20,6 +20,19 @@ class Course:
         db.insert(tableName="courses", data={'id': self.id, 'name': self.name, 'max_students': self.max_students, 'students': self.students})
 
         print(f"Course {self.name} created with success!")
+
+    def update(self):
+        db = DB()
+
+        courseInDB = db.get(tableName="courses", field="id", data=self.id)
+
+        if not courseInDB:
+            print(f"Course with id {self.id} doesn't exists!")
+            return
+        
+        db.update(tableName="courses",field="id",fieldData=self.id,data={'id': self.id, 'name': self.name, 'max_students': self.max_students, 'students': self.students})
+
+        print(f"Course {self.name} has been updated with success!")
 
     @staticmethod
     def list_all():
@@ -35,7 +48,6 @@ class Course:
 
             print(f"Name: {name}, ID: {course_id}, Max students: {max_students}, Students count: {students_count}")
     
-    # WIP (work in progress)
     @staticmethod
     def list_course_students(course_id):
         db = DB()
@@ -48,6 +60,42 @@ class Course:
         
         all_students = Student.get_all()
 
-        students_in_course = list(filter(lambda student: course['students'].contains(student.registration), all_students))
+        students_in_course = list(filter(lambda student: student['registration'] in set(course['students']), list(all_students)))
 
-        print(students_in_course)
+        for student in students_in_course:
+            name = student["name"]
+            cpf = student["cpf"]
+            registration = student["registration"]
+
+            print(f"Name: {name}, CPF: {cpf}, Registration: {registration}")
+    
+    @staticmethod
+    def add_student(student_registration,course_id):
+        db = DB()
+
+        course = db.get(tableName="courses",field="id",data=course_id)
+        student = Student.get(student_registration)
+
+        if not course:
+            print(f"Course id {course_id} doesn't exists!")
+            return
+
+        if not student:
+            print(f"Student registration {student_registration} doesn't exists!")
+            return
+        
+        if student['registration'] in set(course['students']):
+            print(f"Student {student['name']} is already registered in the course {course['name']}!")
+            return
+                
+        if len(course['students']) >= course['max_students']:
+            print(f"Course {course['name']} is already full!")
+            return
+        
+        courseObj = Course(name=course['name'],course_id=course['id'],max_students=course['max_students'])
+        print(course['students'] + [student['registration']])
+        courseObj.students = course['students'] + [student['registration']]
+
+        courseObj.update()
+
+        print(f"Student {student['name']} has been registered to the course {course['name']} with success!")
