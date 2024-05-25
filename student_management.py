@@ -3,6 +3,8 @@ from course import Course
 from student import Student
 from validate import Validate
 
+CPF_STRING_LENGTH = 14 #xxx.xxx.xxx-xx
+
 class StudentManagement(cmd.Cmd):
     prompt = '>> '
     intro = 'Welcome to StudentManagement. Type "help" for available commands.'
@@ -58,7 +60,7 @@ class StudentManagement(cmd.Cmd):
 
             Validate.empty_string("name", name)
 
-            if len(cpf) != 14:
+            if len(cpf) != CPF_STRING_LENGTH:
                 print("cpf parameter should be in the format xxx.xxx.xxx-xx!")
                 return
 
