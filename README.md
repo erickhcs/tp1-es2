@@ -1,8 +1,7 @@
 # tp1-es2
 
 Integrantes:
-Erick Henrique Campolina da Silva
-Gustavo Barros Borba Perdigão
+Erick Henrique Campolina da Silva e Gustavo Barros Borba Perdigão
 
 O sistema é um gerenciador de dados de uma universidade, onde é possível cadastrar cursos e estudantes.
 Também é possível matricular alunos nos respectivos cursos.
