@@ -1,6 +1,5 @@
 import cmd
 from course import Course
-from db import DB
 
 class StudentManagement(cmd.Cmd):
     prompt = '>> '
@@ -13,47 +12,41 @@ class StudentManagement(cmd.Cmd):
     def do_add_course(self, line):
         'Add a new course separated by semicolon: add_student <name>;<course_id>;<max_students>'
         try:
-          splitted_entry = line.split(";")
+            splitted_entry = line.split(";")
 
-          if len(splitted_entry) != 3:
-              print("add_course parameters are incorrect. You should pass values separated by semicolon: add_student <name>;<course_id>;<max_students>")
-              return
-                    
-          name=splitted_entry[0]
-          course_id=splitted_entry[1]
-          max_students=splitted_entry[2]
+            if len(splitted_entry) != 3:
+                print("add_course parameters are incorrect. You should pass values separated by semicolon: add_student <name>;<course_id>;<max_students>")
+                return
+                      
+            name=splitted_entry[0]
+            course_id=splitted_entry[1]
+            max_students=splitted_entry[2]
 
-          if len(name) == 0:
-             print("name parameter should not be empty!")
-             return
-          
-          if len(course_id) == 0:
-             print("course_id parameter should not be empty!")
-             return
-
-
-          if not max_students.isdigit():
-            print("max_students parameter should be a number!")
-            return
+            if len(name) == 0:
+                print("name parameter should not be empty!")
+                return
+            
+            if len(course_id) == 0:
+                print("course_id parameter should not be empty!")
+                return
 
 
-          newCourse = Course(name,course_id,max_students=int(max_students))
-          
-          newCourse.save()
+            if not max_students.isdigit():
+                print("max_students parameter should be a number!")
+                return
+
+
+            newCourse = Course(name,course_id,max_students=int(max_students))
+            
+            newCourse.save()
         
         except ValueError as e:
-          print(f"Error: {e}")
+            print(f"Error: {e}")
 
     def do_list_courses(self, line):
         'List all registered courses'
-        db = DB()
-
-        all_courses = db.get_all(tableName="courses")
-
-        for course in all_courses:
-            name = course["name"]
-            course_id = course["id"]
-            max_students = course["max_students"]
-            students = course["students"]
-
-            print(f"Name: {name}, ID: {course_id}, Max students: {max_students}, Students: {students}")
+        Course.list_all()
+    
+    def do_list_students_from_course(self, line):
+        'List students from a course: list_students_from_course <course_id>'
+        Course.list_course_students(line)
