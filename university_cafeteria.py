@@ -1,4 +1,3 @@
-# UniversityCafeteria.py
 class UniversityCafeteria:
     def __init__(self, meal_price=4.0):
         self.meal_price = meal_price
