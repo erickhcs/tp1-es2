@@ -1,9 +1,11 @@
 import os
 from tinydb import TinyDB, Query
 
+DB_PATH = f"{os.getcwd()}/db/index"
+
 class DB:
     def __init__(self):
-        self.db = TinyDB(os.getcwd() + "/db" + "/index")
+        self.db = TinyDB(DB_PATH)
     
     def insert(self, tableName, data):
         table = self.db.table(tableName)
