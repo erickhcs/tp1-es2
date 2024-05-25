@@ -1,6 +1,6 @@
 class Credit:
-    def __init__(self):
-        self.balance = 0.0
+    def __init__(self, balance):
+        self.balance = balance
 
     def add_credit(self, amount):
         self.balance += amount

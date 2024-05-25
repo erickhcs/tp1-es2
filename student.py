@@ -6,7 +6,7 @@ class Student:
         self.name = name
         self.cpf = cpf
         self.registration = registration
-        self.credit = Credit()
+        self.credit = Credit(balance=0.0)
         self.aids = []
 
     def __str__(self):
@@ -41,6 +41,19 @@ class Student:
 
         print(f"Student {self.name} created with success!")
 
+    def update(self):
+        db = DB()
+
+        studentInDB = db.get(tableName="students", field="registration", data=self.registration)
+
+        if not studentInDB:
+            print(f"Student with id {self.registration} doesn't exists!")
+            return
+        
+        db.update(tableName="students",field="registration",fieldData=self.registration,data={'registration': self.registration, 'name': self.name, 'cpf': self.cpf, 'aids': self.aids, 'credit': self.credit.balance})
+
+        print(f"Student {self.name} has been updated with success!")
+
     @staticmethod
     def get(student_registration):
         db = DB()
@@ -67,3 +80,20 @@ class Student:
         all_students = db.get_all(tableName="students")
 
         return all_students
+    
+    @staticmethod
+    def update_student_name(registration,student_new_name):
+        db = DB()
+
+        student = db.get(tableName="students",field="registration",data=registration)
+
+        if not student:
+            print(f"Student registration {registration} doesn't exists!")
+            return
+        
+        studentObj = Student(name=student_new_name,cpf=student['cpf'],registration=student['registration'])
+        studentObj.credit = Credit(balance=student['credit'])
+        studentObj.aids = student['aids']
+        studentObj.update()
+
+        print(f"Student with id {student['registration']} name has been updated to {student_new_name} with success!")
