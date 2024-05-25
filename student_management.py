@@ -138,3 +138,28 @@ class StudentManagement(cmd.Cmd):
 
         except ValueError as e:
             print(f"Error: {e}")
+
+    def do_update_course_name(self, line):
+        'Update course name: update_course_name <course_id>;<course_new_name>'
+        try:
+            splitted_entry = line.split(";")
+
+            if len(splitted_entry) != 2:
+                print("update_course_name parameters are incorrect. You should pass values separated by semicolon: update_course_name <course_id>;<course_new_name>")
+                return
+            
+            course_id = splitted_entry[0]
+            course_new_name = splitted_entry[1]
+
+            if len(course_id) == 0:
+                print("Course id cannot be empty!")
+                return
+            
+            if len(course_new_name) == 0:
+                print("Course name cannot be empty!")
+                return
+            
+            Course.update_course_name(course_id,course_new_name)
+            
+        except ValueError as e:
+            print(f"Error: {e}")

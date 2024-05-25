@@ -131,3 +131,19 @@ class Course:
         courseObj.update()
 
         print(f"Student {student['name']} has been removed from the course {course['name']} with success!")
+    
+    @staticmethod
+    def update_course_name(course_id,new_course_name):
+        db = DB()
+
+        course = db.get(tableName="courses",field="id",data=course_id)
+
+        if not course:
+            print(f"Course id {course_id} doesn't exists!")
+            return
+        
+        courseObj = Course(name=new_course_name,course_id=course['id'],max_students=course['max_students'])
+        courseObj.students = course['students']
+        courseObj.update()
+
+        print(f"Course with id {course['id']} name has been updated to {new_course_name} with success!")
