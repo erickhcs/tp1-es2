@@ -7,6 +7,6 @@ class Course:
         self.students = []
 
     def save(self):
-        db = DB('courses')
+        db = DB()
 
-        db.insert({'id': self.id, 'name': self.name, 'max_students': self.max_students, 'students': self.students})
+        db.insert(tableName="courses", data={'id': self.id, 'name': self.name, 'max_students': self.max_students, 'students': self.students})

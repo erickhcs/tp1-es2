@@ -1,5 +1,6 @@
 import cmd
 from course import Course
+from db import DB
 
 class StudentManagement(cmd.Cmd):
     prompt = '>> '
@@ -16,4 +17,17 @@ class StudentManagement(cmd.Cmd):
         newCourse = Course(name=splitted_entry[0],course_id=splitted_entry[1],max_students=splitted_entry[2])
         
         newCourse.save()
-        
+
+    def do_list_courses(self, line):
+        'List all registered courses'
+        db = DB()
+
+        all_courses = db.get_all(tableName="courses")
+
+        for course in all_courses:
+            name = course["name"]
+            course_id = course["id"]
+            max_students = course["max_students"]
+            students = course["students"]
+
+            print(f"Name: {name}, ID: {course_id}, Max students: {max_students}, Students: {students}")
