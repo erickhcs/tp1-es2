@@ -1,5 +1,4 @@
-# student.py
-import pickle
+from db import DB
 from credit import Credit
 
 class Student:
@@ -28,20 +27,39 @@ class Student:
 
     def show_balance(self):
         print(f"Current balance of {self.name}: ${self.credit.balance:.2f}")
+    
+    def save(self):
+        db = DB()
+
+        studentInDB = db.get(tableName="students", field="registration", data=self.registration)
+
+        if (studentInDB):
+            print(f"Student with registration {self.registration} already exists!")
+            return
+
+        db.insert(tableName="students", data={'registration': self.registration, 'name': self.name, 'cpf': self.cpf, 'aids': self.aids, 'credit': self.credit.balance})
+
+        print(f"Student {self.name} created with success!")
 
     @staticmethod
-    def save_students(students, filename="students.pkl"):
-        with open(filename, 'wb') as file:
-            pickle.dump(students, file)
-        print("Students saved successfully.")
+    def list_all():
+        db = DB()
+
+        all_students = db.get_all(tableName="students")
+
+        for student in all_students:
+            name = student["name"]
+            cpf = student["cpf"]
+            registration = student["registration"]
+
+            print(f"Name: {name}, CPF: {cpf}, Registration: {registration}")
+
+
 
     @staticmethod
-    def load_students(filename="students.pkl"):
-        try:
-            with open(filename, 'rb') as file:
-                students = pickle.load(file)
-            print("Students loaded successfully.")
-            return students
-        except FileNotFoundError:
-            print("File not found. Starting with an empty list of students.")
-            return []
+    def get_all():
+        db = DB()
+
+        all_students = db.get_all(tableName="students")
+
+        return all_students

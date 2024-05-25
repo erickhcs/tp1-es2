@@ -1,4 +1,3 @@
-# aid.py
 class Aid:
     def __init__(self, type, amount):
         self.type = type

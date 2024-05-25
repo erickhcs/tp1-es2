@@ -46,8 +46,8 @@ class Course:
             print(f"Course id {course_id} doesn't exists!")
             return
         
-        registeredStudents = course["students"]
+        all_students = Student.get_all()
 
-        all_students = Student.load_students()
+        students_in_course = list(filter(lambda student: course['students'].contains(student.registration), all_students))
 
-        print(all_students)
+        print(students_in_course)

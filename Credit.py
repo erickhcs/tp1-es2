@@ -1,4 +1,3 @@
-# credit.py
 class Credit:
     def __init__(self):
         self.balance = 0.0
