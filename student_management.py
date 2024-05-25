@@ -1,6 +1,8 @@
 import cmd
 from course import Course
 from student import Student
+from validate import Validate
+
 class StudentManagement(cmd.Cmd):
     prompt = '>> '
     intro = 'Welcome to StudentManagement. Type "help" for available commands.'
@@ -22,19 +24,9 @@ class StudentManagement(cmd.Cmd):
             course_id=splitted_entry[1]
             max_students=splitted_entry[2]
 
-            if len(name) == 0:
-                print("name parameter should not be empty!")
-                return
-            
-            if len(course_id) == 0:
-                print("course_id parameter should not be empty!")
-                return
-
-
-            if not max_students.isdigit():
-                print("max_students parameter should be a number!")
-                return
-
+            Validate.empty_string("name", name)
+            Validate.empty_string("course_id", course_id)
+            Validate.digit("max_students", max_students)
 
             newCourse = Course(name,course_id,max_students=int(max_students))
             
@@ -64,19 +56,13 @@ class StudentManagement(cmd.Cmd):
             cpf=splitted_entry[1]
             registration=splitted_entry[2]
 
-            if len(name) == 0:
-                print("name parameter should not be empty!")
-                return
-            
+            Validate.empty_string("name", name)
+
             if len(cpf) != 14:
                 print("cpf parameter should be in the format xxx.xxx.xxx-xx!")
                 return
 
-
-            if not registration.isdigit():
-                print("registration parameter should be a number!")
-                return
-
+            Validate.digit("registration", registration)
 
             newStudent = Student(name,cpf,registration=int(registration))
             
@@ -101,13 +87,8 @@ class StudentManagement(cmd.Cmd):
             student_registration = splitted_entry[0]
             course_id = splitted_entry[1]
 
-            if len(course_id) == 0:
-                print("course_id parameter should not be empty!")
-                return
-
-            if not student_registration.isdigit():
-                print("student_registration parameter should be a number!")
-                return
+            Validate("course_id", course_id)
+            Validate.digit("student_registration", student_registration)
             
             Course.add_student(student_registration=int(student_registration),course_id=course_id)
 
@@ -126,13 +107,8 @@ class StudentManagement(cmd.Cmd):
             student_registration = splitted_entry[0]
             course_id = splitted_entry[1]
 
-            if len(course_id) == 0:
-                print("course_id parameter should not be empty!")
-                return
-
-            if not student_registration.isdigit():
-                print("student_registration parameter should be a number!")
-                return
+            Validate.empty_string("course_id",course_id)
+            Validate.digit("student_registration", student_registration)
             
             Course.remove_student(student_registration=int(student_registration),course_id=course_id)
 
@@ -151,13 +127,8 @@ class StudentManagement(cmd.Cmd):
             course_id = splitted_entry[0]
             course_new_name = splitted_entry[1]
 
-            if len(course_id) == 0:
-                print("Course id cannot be empty!")
-                return
-            
-            if len(course_new_name) == 0:
-                print("Course name cannot be empty!")
-                return
+            Validate.empty_string("course_id", course_id)
+            Validate.empty_string("course_new_name", course_new_name)
             
             Course.update_course_name(course_id,course_new_name)
             
@@ -176,14 +147,8 @@ class StudentManagement(cmd.Cmd):
             registration = splitted_entry[0]
             student_new_name = splitted_entry[1]
 
-            if not registration.isdigit():
-                print("Registration parameter should be a number!")
-                return
-            
-            
-            if len(student_new_name) == 0:
-                print("Student new name cannot be empty!")
-                return
+            Validate.digit("registration", registration)
+            Validate.empty_string(fieldName="Student new name", value=student_new_name)
             
             Student.update_student_name(registration=int(registration),student_new_name=student_new_name)
             
